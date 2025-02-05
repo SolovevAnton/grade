@@ -117,6 +117,7 @@ class CollectionToStreamTest {
 
             assertTrue(result.containsAll(List.of(book1, book3)));
         }
+
         @Test
         void shouldSortBooksByPageNumber() {
             Book book1 = new Book("Book One", List.of(new Author("Alice", (short) 45, null)), 150);
@@ -127,7 +128,7 @@ class CollectionToStreamTest {
 
             List<Book> result = sortedByPageNum(books);
 
-            assertEquals(List.of(book1, book3, book2),result);
+            assertEquals(List.of(book1, book3, book2), result);
         }
 
         @Test
@@ -140,7 +141,7 @@ class CollectionToStreamTest {
 
             List<Book> result = sortedByPageName(books);
 
-            assertEquals(List.of(book1, book3, book2),result);
+            assertEquals(List.of(book1, book3, book2), result);
         }
 
         @Test
@@ -177,7 +178,7 @@ class CollectionToStreamTest {
             author3.getBooks().add(book3);
 
             // Books array
-            Author[] authors = {author1,author2,author3};
+            Author[] authors = {author1, author2, author3};
 
             // Expected result
             Map<Author, Optional<String>> expected = Map.of(
