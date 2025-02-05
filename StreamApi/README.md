@@ -82,4 +82,5 @@ For PROP5: {false=1, true=1}
 
 Ограничение:
 Запрещено использовать условные операторы (if, for, while и т. д.).
-Для выполнения задания скачайте архив streams-count-words-check.zip.
+Для выполнения задания скачайте архив streams-count-words-check.zip. 
+архив скачан развернуты (WordExerciseTest) и файл исполнения Words.java
