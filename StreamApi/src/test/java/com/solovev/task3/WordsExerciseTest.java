@@ -44,7 +44,7 @@ public class WordsExerciseTest {
     @Test
     public void testNoLambdas() throws IOException {
 
-        final Path sources = Paths.get("src/main/java");
+        final Path sources = Paths.get("src/main/java/com/solovev/task3");
         Files.walk(sources)
                 .filter(Files::isRegularFile)
                 .filter(p -> p.toString().endsWith(".java"))
