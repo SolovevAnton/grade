@@ -1,11 +1,14 @@
 package com.solovev.task1;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
 
+@UtilityClass
 public class CollectionToStream {
     //a
     public static boolean booksContainsOver200Pages(Book[] books) {
@@ -15,31 +18,31 @@ public class CollectionToStream {
     //b
     public static List<Book> booksWithMaxPages(Book[] books) {
         int maxPages = Stream.of(books).mapToInt(Book::getNumberOfPages).max().orElseThrow();
-        return Stream.of(books).filter(b -> b.getNumberOfPages() == maxPages).collect(toList());
+        return Stream.of(books).filter(b -> b.getNumberOfPages() == maxPages).toList();
     }
 
     public static List<Book> booksWithMinPages(Book[] books) {
         int maxPages = Stream.of(books).mapToInt(Book::getNumberOfPages).min().orElseThrow();
-        return Stream.of(books).filter(b -> b.getNumberOfPages() == maxPages).collect(toList());
+        return Stream.of(books).filter(b -> b.getNumberOfPages() == maxPages).toList();
     }
 
     //c
     public static List<Book> booksWithOneAuthor(Book[] books) {
-        return Stream.of(books).filter(b -> b.getAuthors().size() == 1).collect(toList());
+        return Stream.of(books).filter(b -> b.getAuthors().size() == 1).toList();
     }
 
     //d
     public static List<Book> sortedByPageNum(Book[] books) {
-        return Stream.of(books).sorted(Comparator.comparingInt(Book::getNumberOfPages)).collect(toList());
+        return Stream.of(books).sorted(Comparator.comparingInt(Book::getNumberOfPages)).toList();
     }
 
     public static List<Book> sortedByPageName(Book[] books) {
-        return Stream.of(books).sorted(Comparator.comparing(Book::getTitle)).collect(toList());
+        return Stream.of(books).sorted(Comparator.comparing(Book::getTitle)).toList();
     }
 
     //e + f
     public static List<String> getAndPrintAllTitles(Book[] books) {
-        return Stream.of(books).map(Book::getTitle).peek(System.out::println).collect(toList());
+        return Stream.of(books).map(Book::getTitle).peek(System.out::println).toList();
     }
 
 
