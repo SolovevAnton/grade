@@ -11,6 +11,7 @@
     <modules>
         <module>StreamApi</module>
         <module>Generics</module>
+        <module>Patterns</module>
     </modules>
 
     <properties>
