@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class Publisher {
-    private String name;
-    private String email;
+    private final String name;
+    private final String email;
 }
