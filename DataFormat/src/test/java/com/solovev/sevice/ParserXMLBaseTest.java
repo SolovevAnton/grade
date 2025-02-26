@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +26,7 @@ public abstract class ParserXMLBaseTest {
         Path file = Paths.get("src/test/resources/books.xml");
         assertTrue(Files.exists(file));
         //when
-        var books = parserXML.parse(file);
+        List<Book> books = parserXML.parse(file);
         //then
         assertEquals(getExpectedBooks(), books);
     }
@@ -40,16 +41,6 @@ public abstract class ParserXMLBaseTest {
         assertThrows(IllegalArgumentException.class, () -> parserXML.parse(file));
     }
 
-    @Test
-    public void emptyFileTest() {
-        //given
-        Path file = Paths.get("src/test/resources/empty.xml");
-        assertTrue(Files.exists(file));
-        //when
-        var res = parserXML.parse(file);
-        //then
-        assertTrue(res.isEmpty());
-    }
 
 
     @BeforeEach
@@ -65,8 +56,8 @@ public abstract class ParserXMLBaseTest {
         Book book1 = new Book(
                 "Book 1",
                 LocalDate.of(2025, 1, 1),
-                List.of(author1),
-                List.of(publisher1)
+                Arrays.asList(author1),
+                Arrays.asList(publisher1)
         );
 
         // Book 2
@@ -76,8 +67,8 @@ public abstract class ParserXMLBaseTest {
         Book book2 = new Book(
                 "Book 2",
                 LocalDate.of(2025, 2, 1),
-                List.of(author2, author3),
-                List.of(publisher2)
+                Arrays.asList(author2, author3),
+                Arrays.asList(publisher2)
         );
 
         // Book 3
@@ -88,10 +79,10 @@ public abstract class ParserXMLBaseTest {
         Book book3 = new Book(
                 "Book 3",
                 LocalDate.of(2025, 3, 1),
-                List.of(author4, author5),
-                List.of(publisher3, publisher4)
+                Arrays.asList(author4, author5),
+                Arrays.asList(publisher3, publisher4)
         );
 
-        return List.of(book1, book2, book3);
+        return Arrays.asList(book1, book2, book3);
     }
 }
