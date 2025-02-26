@@ -3,41 +3,40 @@ package com.solovev.sevice;
 import com.solovev.model.Author;
 import com.solovev.model.Book;
 import com.solovev.model.Publisher;
-import lombok.NonNull;
-import lombok.SneakyThrows;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class DomParser implements ParserXML {
 
     @Override
-    @SneakyThrows
-    public List<Book> parse(@NonNull Path xml) {
+    public List<Book> parse(Path xml) {
         Document doc = getDoc(xml);
-        var books = doc.getDocumentElement().getChildNodes();
+        NodeList books = doc.getDocumentElement().getChildNodes();
         return toElements(books)
                 .map(this::createBook)
-                .toList();
+                .collect(Collectors.toList());
     }
 
-    private Document getDoc(Path xml) throws ParserConfigurationException, IOException, SAXException {
+    private Document getDoc(Path xml) {
         validateFile(xml);
-        return DocumentBuilderFactory.newInstance()
-                .newDocumentBuilder()
-                .parse(xml.toFile());
+        try {
+            return DocumentBuilderFactory.newInstance()
+                    .newDocumentBuilder()
+                    .parse(xml.toFile());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void validateFile(Path file) {
@@ -58,8 +57,9 @@ public class DomParser implements ParserXML {
     private Book createBook(Element bookElement) {
         String title = bookElement.getElementsByTagName("name").item(0).getTextContent();
         LocalDate date = LocalDate.parse(bookElement.getElementsByTagName("publishDate").item(0).getTextContent());
-        List<Author> authors = extract("author", bookElement).map(this::createAuthor).toList();
-        List<Publisher> publishers = extract("publisher", bookElement).map(this::createPublisher).toList();
+        List<Author> authors = extract("author", bookElement).map(this::createAuthor).collect(Collectors.toList());
+        List<Publisher> publishers =
+                extract("publisher", bookElement).map(this::createPublisher).collect(Collectors.toList());
         return new Book(title, date, authors, publishers);
     }
 
