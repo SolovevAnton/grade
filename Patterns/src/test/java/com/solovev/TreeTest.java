@@ -32,8 +32,8 @@ class TreeTest {
             var tree = createNodeTree();
 
             var result = new ArrayList<String>();
-            Consumer<Node> ifLeaf = _ -> result.add("I found leaf");
-            Consumer<Node> ifBranch = _ -> result.add("I found branch");
+            Consumer<Node> ifLeaf = a -> result.add("I found leaf");
+            Consumer<Node> ifBranch = a -> result.add("I found branch");
             //when
             tree.iterate(ifLeaf, ifBranch);
             assertEquals(List.of("I found branch", "I found branch", "I found branch", "I found leaf", "I found leaf",

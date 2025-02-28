@@ -54,7 +54,7 @@ public class MyCollector implements Collector<SomeEntity, MyCollector.Accumulato
 
         private void addProperty(Property property, boolean value) {
             numberOfTrueAndFalseForEachProperty.merge(property, getMap(value),
-                    (old, _) -> addStatistics(old, value));
+                    (old, skipped) -> addStatistics(old, value));
         }
 
         private Map<Boolean, Integer> getMap(boolean key) {
