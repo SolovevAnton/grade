@@ -7,6 +7,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +17,10 @@ public class User {
     private String surname;
     private String email;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Task.class)
     private List<Task> tasks;
+
+    public boolean addTask(Task task) {
+        return tasks.add(task);
+    }
 }
