@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: Spring-rest-soap
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
