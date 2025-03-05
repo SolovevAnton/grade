@@ -1,8 +1,10 @@
 package com.solovev.springrestsoap.controller;
 
+import com.solovev.springrestsoap.controller.hateoas.TaskLinksProvider;
 import com.solovev.springrestsoap.model.Task;
 import com.solovev.springrestsoap.service.TaskService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,20 +18,27 @@ import static com.solovev.springrestsoap.config.APIEndpoints.USERS_REST;
 public class TaskController {
 
     private final TaskService taskService;
+    private final TaskLinksProvider taskLinksProvider;
 
     @GetMapping("/{userId}/tasks/{taskId}")
-    public ResponseEntity<Task> getTask(@PathVariable("userId") Long userId, @PathVariable("taskId") Long taskId) {
-        return ResponseEntity.of(taskService.findById(taskId));
+    public ResponseEntity<?> getTask(@PathVariable("userId") Long userId, @PathVariable("taskId") Long taskId) {
+        Task found = taskService.findById(taskId).orElseThrow();
+        taskLinksProvider.addLinks(found, userId);
+        return ResponseEntity.ok(found);
     }
 
     @GetMapping("/{userId}/tasks")
-    public ResponseEntity<List<Task>> getTask(@PathVariable("userId") Long userId) {
-        return ResponseEntity.ok(taskService.findByUserId(userId));
+    public ResponseEntity<List<Task>> getTasks(@PathVariable("userId") Long userId) {
+        var tasks = taskService.findByUserId(userId);
+        tasks.forEach(task -> taskLinksProvider.addLinks(task, userId));
+        return ResponseEntity.ok(tasks);
     }
 
     @PostMapping("/{userId}/tasks")
     public ResponseEntity<Task> createTask(@PathVariable Long userId, @RequestBody Task task) {
-        return ResponseEntity.status(201).body(taskService.save(userId, task));
+        Task created = taskService.save(userId, task);
+        Link self = taskLinksProvider.addLinks(created, userId);
+        return ResponseEntity.created(self.toUri()).body(created);
     }
 
     @DeleteMapping("/{userId}/tasks/{taskId}")

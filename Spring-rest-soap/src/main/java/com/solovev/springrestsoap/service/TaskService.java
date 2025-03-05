@@ -21,7 +21,8 @@ public class TaskService {
 
     public Task save(Long userId, Task task) {
         userService.getById(userId).orElseThrow().addTask(task);
-        return taskRepository.save(task);
+        var savedTask = taskRepository.save(task);
+        return savedTask;
     }
 
     public Optional<Task> findById(Long taskId) {
