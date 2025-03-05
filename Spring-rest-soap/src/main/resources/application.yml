@@ -10,3 +10,11 @@ spring:
       hibernate:
         format_sql: true
     defer-datasource-initialization: true
+
+springdoc:
+  api-docs:
+    path: rest/api-docs
+  swagger-ui:
+    path: rest/swagger-ui
+    disable-swagger-default-url: true
+    version: 2.0
