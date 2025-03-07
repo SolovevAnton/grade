@@ -1,11 +1,14 @@
 package com.solovev.springrestsoap.service;
 
 import com.solovev.springrestsoap.model.Task;
+import com.solovev.springrestsoap.model.User;
 import com.solovev.springrestsoap.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -19,6 +22,7 @@ public class TaskService {
                 .getTasks();
     }
 
+    @Transactional
     public Task save(Long userId, Task task) {
         userService.getById(userId).orElseThrow().addTask(task);
         var savedTask = taskRepository.save(task);
@@ -29,8 +33,15 @@ public class TaskService {
         return taskRepository.findById(taskId);
     }
 
-    public void deleteById(Long taskId) {
-        taskRepository.deleteById(taskId);
+    @Transactional
+    public void deleteById(Long userId, Long taskId) {
+        User user = userService.getById(userId).orElseThrow();
+        Task task = taskRepository.findById(taskId).orElseThrow();
+        boolean wasDeleted = user.getTasks().remove(task);
+        if (!wasDeleted) {
+            throw new NoSuchElementException("Task does not belong to this user");
+        }
+        taskRepository.delete(task);
     }
 
     private final TaskRepository taskRepository;

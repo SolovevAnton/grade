@@ -1,15 +1,17 @@
 package com.solovev.springrestsoap.model;
 
+import com.solovev.springrestsoap.service.adapter.LocalDateTimeAdapter;
 import jakarta.persistence.*;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.hateoas.RepresentationModel;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDateTime;
 
 @Data
@@ -29,9 +31,12 @@ public class Task extends RepresentationModel<Task> {
 
     @XmlElement(name = "createdDate")
     @CreatedDate
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     private LocalDateTime createdDate;
 
     @XmlElement(name = "deadline")
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     private LocalDateTime deadline;
+
 
 }

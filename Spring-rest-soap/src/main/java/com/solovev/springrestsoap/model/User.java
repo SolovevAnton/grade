@@ -1,10 +1,10 @@
 package com.solovev.springrestsoap.model;
 
 import jakarta.persistence.*;
+import jakarta.xml.bind.annotation.*;
 import lombok.Data;
 import org.springframework.hateoas.RepresentationModel;
 
-import javax.xml.bind.annotation.*;
 import java.util.List;
 
 @Entity
