@@ -18,3 +18,7 @@ springdoc:
     path: rest/swagger-ui
     disable-swagger-default-url: true
     version: 2.0
+logging:
+  level:
+    root: info
+    # web: debug

@@ -4,11 +4,14 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.hateoas.RepresentationModel;
 
+import javax.xml.bind.annotation.*;
 import java.util.List;
 
 @Entity
 @Data
 @Table(name = "users")
+@XmlRootElement(name = "User")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class User extends RepresentationModel<User> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +21,9 @@ public class User extends RepresentationModel<User> {
     private String surname;
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Task.class)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Task.class, fetch = FetchType.EAGER)
+    @XmlElementWrapper(name = "tasks")
+    @XmlElement(name = "task")
     private List<Task> tasks;
 
     public boolean addTask(Task task) {
