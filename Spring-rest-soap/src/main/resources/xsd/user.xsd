@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://localhost:8080/user"
+           xmlns="http://localhost:8080/user"
+           elementFormDefault="qualified">
+
+    <!-- User element -->
+    <xs:complexType name="User">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="surname" type="xs:string"/>
+            <xs:element name="email" type="xs:string"/>
+            <xs:element name="tasks" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="task" type="Task" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Task element -->
+    <xs:complexType name="Task">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="createdDate" type="xs:dateTime"/>
+            <xs:element name="deadline" type="xs:dateTime" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="GetUserRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="userId" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Define GetUserResponse Type -->
+    <xs:complexType name="GetUserResponse">
+        <xs:sequence>
+            <xs:element name="user" type="User"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
