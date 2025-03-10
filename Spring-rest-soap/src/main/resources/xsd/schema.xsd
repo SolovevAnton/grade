@@ -4,14 +4,14 @@
            xmlns="http://localhost:8080/user"
            elementFormDefault="qualified">
 
-    <!-- User element -->
+    <!-- User complex type -->
     <xs:complexType name="User">
         <xs:sequence>
             <xs:element name="id" type="xs:long"/>
             <xs:element name="name" type="xs:string"/>
             <xs:element name="surname" type="xs:string"/>
             <xs:element name="email" type="xs:string"/>
-            <xs:element name="tasks" minOccurs="0" maxOccurs="1">
+            <xs:element name="tasks" minOccurs="0">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="task" type="Task" minOccurs="0" maxOccurs="unbounded"/>
@@ -21,7 +21,7 @@
         </xs:sequence>
     </xs:complexType>
 
-    <!-- Task element -->
+    <!-- Task complex type -->
     <xs:complexType name="Task">
         <xs:sequence>
             <xs:element name="id" type="xs:long"/>
@@ -32,9 +32,7 @@
         </xs:sequence>
     </xs:complexType>
 
-
-    <!-- User Requests | Response-->
-    <!--get-->
+    <!-- GetUserRequest element -->
     <xs:element name="GetUserRequest">
         <xs:complexType>
             <xs:sequence>
@@ -43,13 +41,16 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:complexType name="GetUserResponse">
-        <xs:sequence>
-            <xs:element name="user" type="User"/>
-        </xs:sequence>
-    </xs:complexType>
+    <!-- GetUserResponse element -->
+    <xs:element name="GetUserResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="user" type="User"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 
-    <!--create-->
+    <!-- CreateUserRequest element -->
     <xs:element name="CreateUserRequest">
         <xs:complexType>
             <xs:sequence>
@@ -58,8 +59,16 @@
         </xs:complexType>
     </xs:element>
 
+    <!-- CreateUserResponse element -->
+    <xs:element name="CreateUserResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="user" type="User"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 
-    <!--delete-->
+    <!-- DeleteUserRequest element -->
     <xs:element name="DeleteUserRequest">
         <xs:complexType>
             <xs:sequence>
@@ -68,9 +77,16 @@
         </xs:complexType>
     </xs:element>
 
+    <!-- DeleteUserResponse element -->
+    <xs:element name="DeleteUserResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="user" type="User"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 
-    <!-- Task Requests | Response-->
-    <!--get-->
+    <!-- GetTaskRequest element -->
     <xs:element name="GetTaskRequest">
         <xs:complexType>
             <xs:sequence>
@@ -79,12 +95,16 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:complexType name="GetTaskResponse">
-        <xs:sequence>
-            <xs:element name="task" type="Task"/>
-        </xs:sequence>
-    </xs:complexType>
+    <!-- GetTaskResponse element -->
+    <xs:element name="GetTaskResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="task" type="Task"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 
+    <!-- GetAllTasksRequest element -->
     <xs:element name="GetAllTasksRequest">
         <xs:complexType>
             <xs:sequence>
@@ -93,7 +113,22 @@
         </xs:complexType>
     </xs:element>
 
-    <!--create -->
+    <!-- GetAllTasksResponse element -->
+    <xs:element name="GetAllTasksResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="tasks">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="task" type="Task" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- CreateTaskRequest element -->
     <xs:element name="CreateTaskRequest">
         <xs:complexType>
             <xs:sequence>
@@ -102,12 +137,31 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <!--delete-->
+
+    <!-- CreateTaskResponse element -->
+    <xs:element name="CreateTaskResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="task" type="Task"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- DeleteTaskRequest element -->
     <xs:element name="DeleteTaskRequest">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="userId" type="xs:long"/>
                 <xs:element name="taskId" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- DeleteTaskResponse element -->
+    <xs:element name="DeleteTaskResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="task" type="Task"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
