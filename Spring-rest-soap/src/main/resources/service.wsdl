@@ -5,15 +5,14 @@
     <wsdl:types>
         <xs:schema xmlns="http://localhost:8080/user" xmlns:xs="http://www.w3.org/2001/XMLSchema"
                    elementFormDefault="qualified" targetNamespace="http://localhost:8080/user">
-
-            <!-- User element -->
+            <!-- User complex type -->
             <xs:complexType name="User">
                 <xs:sequence>
                     <xs:element name="id" type="xs:long"/>
                     <xs:element name="name" type="xs:string"/>
                     <xs:element name="surname" type="xs:string"/>
                     <xs:element name="email" type="xs:string"/>
-                    <xs:element maxOccurs="1" minOccurs="0" name="tasks">
+                    <xs:element minOccurs="0" name="tasks">
                         <xs:complexType>
                             <xs:sequence>
                                 <xs:element maxOccurs="unbounded" minOccurs="0" name="task" type="Task"/>
@@ -22,8 +21,7 @@
                     </xs:element>
                 </xs:sequence>
             </xs:complexType>
-
-            <!-- Task element -->
+            <!-- Task complex type -->
             <xs:complexType name="Task">
                 <xs:sequence>
                     <xs:element name="id" type="xs:long"/>
@@ -33,10 +31,7 @@
                     <xs:element name="deadline" type="xs:dateTime"/>
                 </xs:sequence>
             </xs:complexType>
-
-
-            <!-- User Requests | Response-->
-            <!--get-->
+            <!-- GetUserRequest element -->
             <xs:element name="GetUserRequest">
                 <xs:complexType>
                     <xs:sequence>
@@ -44,14 +39,15 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-
-            <xs:complexType name="GetUserResponse">
-                <xs:sequence>
-                    <xs:element name="user" type="User"/>
-                </xs:sequence>
-            </xs:complexType>
-
-            <!--create-->
+            <!-- GetUserResponse element -->
+            <xs:element name="GetUserResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="user" type="User"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <!-- CreateUserRequest element -->
             <xs:element name="CreateUserRequest">
                 <xs:complexType>
                     <xs:sequence>
@@ -59,9 +55,15 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-
-
-            <!--delete-->
+            <!-- CreateUserResponse element -->
+            <xs:element name="CreateUserResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="user" type="User"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <!-- DeleteUserRequest element -->
             <xs:element name="DeleteUserRequest">
                 <xs:complexType>
                     <xs:sequence>
@@ -69,10 +71,15 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-
-
-            <!-- Task Requests | Response-->
-            <!--get-->
+            <!-- DeleteUserResponse element -->
+            <xs:element name="DeleteUserResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="user" type="User"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <!-- GetTaskRequest element -->
             <xs:element name="GetTaskRequest">
                 <xs:complexType>
                     <xs:sequence>
@@ -80,13 +87,15 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-
-            <xs:complexType name="GetTaskResponse">
-                <xs:sequence>
-                    <xs:element name="task" type="Task"/>
-                </xs:sequence>
-            </xs:complexType>
-
+            <!-- GetTaskResponse element -->
+            <xs:element name="GetTaskResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="task" type="Task"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <!-- GetAllTasksRequest element -->
             <xs:element name="GetAllTasksRequest">
                 <xs:complexType>
                     <xs:sequence>
@@ -94,8 +103,21 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-
-            <!--create -->
+            <!-- GetAllTasksResponse element -->
+            <xs:element name="GetAllTasksResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="tasks">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element maxOccurs="unbounded" minOccurs="0" name="task" type="Task"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <!-- CreateTaskRequest element -->
             <xs:element name="CreateTaskRequest">
                 <xs:complexType>
                     <xs:sequence>
@@ -104,7 +126,15 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <!--delete-->
+            <!-- CreateTaskResponse element -->
+            <xs:element name="CreateTaskResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="task" type="Task"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <!-- DeleteTaskRequest element -->
             <xs:element name="DeleteTaskRequest">
                 <xs:complexType>
                     <xs:sequence>
@@ -113,9 +143,36 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-
+            <!-- DeleteTaskResponse element -->
+            <xs:element name="DeleteTaskResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="task" type="Task"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
         </xs:schema>
     </wsdl:types>
+    <wsdl:message name="GetTaskRequest">
+        <wsdl:part element="tns:GetTaskRequest" name="GetTaskRequest">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="GetUserRequest">
+        <wsdl:part element="tns:GetUserRequest" name="GetUserRequest">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="CreateTaskResponse">
+        <wsdl:part element="tns:CreateTaskResponse" name="CreateTaskResponse">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="DeleteTaskRequest">
+        <wsdl:part element="tns:DeleteTaskRequest" name="DeleteTaskRequest">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="GetTaskResponse">
+        <wsdl:part element="tns:GetTaskResponse" name="GetTaskResponse">
+        </wsdl:part>
+    </wsdl:message>
     <wsdl:message name="DeleteUserRequest">
         <wsdl:part element="tns:DeleteUserRequest" name="DeleteUserRequest">
         </wsdl:part>
@@ -128,95 +185,138 @@
         <wsdl:part element="tns:CreateTaskRequest" name="CreateTaskRequest">
         </wsdl:part>
     </wsdl:message>
-    <wsdl:message name="GetTaskRequest">
-        <wsdl:part element="tns:GetTaskRequest" name="GetTaskRequest">
+    <wsdl:message name="GetUserResponse">
+        <wsdl:part element="tns:GetUserResponse" name="GetUserResponse">
         </wsdl:part>
     </wsdl:message>
-    <wsdl:message name="GetUserRequest">
-        <wsdl:part element="tns:GetUserRequest" name="GetUserRequest">
-        </wsdl:part>
-    </wsdl:message>
-    <wsdl:message name="DeleteTaskRequest">
-        <wsdl:part element="tns:DeleteTaskRequest" name="DeleteTaskRequest">
+    <wsdl:message name="CreateUserResponse">
+        <wsdl:part element="tns:CreateUserResponse" name="CreateUserResponse">
         </wsdl:part>
     </wsdl:message>
     <wsdl:message name="CreateUserRequest">
         <wsdl:part element="tns:CreateUserRequest" name="CreateUserRequest">
         </wsdl:part>
     </wsdl:message>
+    <wsdl:message name="DeleteUserResponse">
+        <wsdl:part element="tns:DeleteUserResponse" name="DeleteUserResponse">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="GetAllTasksResponse">
+        <wsdl:part element="tns:GetAllTasksResponse" name="GetAllTasksResponse">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="DeleteTaskResponse">
+        <wsdl:part element="tns:DeleteTaskResponse" name="DeleteTaskResponse">
+        </wsdl:part>
+    </wsdl:message>
     <wsdl:portType name="UserPort">
-        <wsdl:operation name="DeleteUser">
-            <wsdl:input message="tns:DeleteUserRequest" name="DeleteUserRequest">
-            </wsdl:input>
-        </wsdl:operation>
-        <wsdl:operation name="GetAllTasks">
-            <wsdl:input message="tns:GetAllTasksRequest" name="GetAllTasksRequest">
-            </wsdl:input>
-        </wsdl:operation>
-        <wsdl:operation name="CreateTask">
-            <wsdl:input message="tns:CreateTaskRequest" name="CreateTaskRequest">
-            </wsdl:input>
-        </wsdl:operation>
         <wsdl:operation name="GetTask">
             <wsdl:input message="tns:GetTaskRequest" name="GetTaskRequest">
             </wsdl:input>
+            <wsdl:output message="tns:GetTaskResponse" name="GetTaskResponse">
+            </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="GetUser">
             <wsdl:input message="tns:GetUserRequest" name="GetUserRequest">
             </wsdl:input>
+            <wsdl:output message="tns:GetUserResponse" name="GetUserResponse">
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="CreateTask">
+            <wsdl:input message="tns:CreateTaskRequest" name="CreateTaskRequest">
+            </wsdl:input>
+            <wsdl:output message="tns:CreateTaskResponse" name="CreateTaskResponse">
+            </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="DeleteTask">
             <wsdl:input message="tns:DeleteTaskRequest" name="DeleteTaskRequest">
             </wsdl:input>
+            <wsdl:output message="tns:DeleteTaskResponse" name="DeleteTaskResponse">
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteUser">
+            <wsdl:input message="tns:DeleteUserRequest" name="DeleteUserRequest">
+            </wsdl:input>
+            <wsdl:output message="tns:DeleteUserResponse" name="DeleteUserResponse">
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetAllTasks">
+            <wsdl:input message="tns:GetAllTasksRequest" name="GetAllTasksRequest">
+            </wsdl:input>
+            <wsdl:output message="tns:GetAllTasksResponse" name="GetAllTasksResponse">
+            </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="CreateUser">
             <wsdl:input message="tns:CreateUserRequest" name="CreateUserRequest">
             </wsdl:input>
+            <wsdl:output message="tns:CreateUserResponse" name="CreateUserResponse">
+            </wsdl:output>
         </wsdl:operation>
     </wsdl:portType>
     <wsdl:binding name="UserPortSoap11" type="tns:UserPort">
         <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-        <wsdl:operation name="DeleteUser">
-            <soap:operation soapAction=""/>
-            <wsdl:input name="DeleteUserRequest">
-                <soap:body use="literal"/>
-            </wsdl:input>
-        </wsdl:operation>
-        <wsdl:operation name="GetAllTasks">
-            <soap:operation soapAction=""/>
-            <wsdl:input name="GetAllTasksRequest">
-                <soap:body use="literal"/>
-            </wsdl:input>
-        </wsdl:operation>
-        <wsdl:operation name="CreateTask">
-            <soap:operation soapAction=""/>
-            <wsdl:input name="CreateTaskRequest">
-                <soap:body use="literal"/>
-            </wsdl:input>
-        </wsdl:operation>
         <wsdl:operation name="GetTask">
             <soap:operation soapAction=""/>
             <wsdl:input name="GetTaskRequest">
                 <soap:body use="literal"/>
             </wsdl:input>
+            <wsdl:output name="GetTaskResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="GetUser">
             <soap:operation soapAction=""/>
             <wsdl:input name="GetUserRequest">
                 <soap:body use="literal"/>
             </wsdl:input>
+            <wsdl:output name="GetUserResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="CreateTask">
+            <soap:operation soapAction=""/>
+            <wsdl:input name="CreateTaskRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="CreateTaskResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="DeleteTask">
             <soap:operation soapAction=""/>
             <wsdl:input name="DeleteTaskRequest">
                 <soap:body use="literal"/>
             </wsdl:input>
+            <wsdl:output name="DeleteTaskResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteUser">
+            <soap:operation soapAction=""/>
+            <wsdl:input name="DeleteUserRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DeleteUserResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetAllTasks">
+            <soap:operation soapAction=""/>
+            <wsdl:input name="GetAllTasksRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="GetAllTasksResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="CreateUser">
             <soap:operation soapAction=""/>
             <wsdl:input name="CreateUserRequest">
                 <soap:body use="literal"/>
             </wsdl:input>
+            <wsdl:output name="CreateUserResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
         </wsdl:operation>
     </wsdl:binding>
     <wsdl:service name="UserPortService">

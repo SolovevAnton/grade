@@ -1,8 +1,9 @@
-package com.solovev.client;
+package com.solovev.soapclient;
 
-import com.solovev.springrestsoap.dto.soap.user.CreateUserRequest;
-import com.solovev.springrestsoap.dto.soap.user.GetUserRequest;
-import com.solovev.springrestsoap.model.User;
+
+import com.solovev.soapclient.dto.soap.user.CreateUserRequest;
+import com.solovev.soapclient.dto.soap.user.GetUserRequest;
+import com.solovev.soapclient.model.User;
 import jakarta.xml.ws.Service;
 import jakarta.xml.ws.WebServiceClient;
 
@@ -29,8 +30,7 @@ public class UserClient {
         GetUserRequest request = new GetUserRequest();
         request.setUserId(userId);
 
-        var response = userPort.GetUser(request);
-        return response;
+        return userPort.GetUser(request);
 
     }
 
@@ -39,8 +39,7 @@ public class UserClient {
         CreateUserRequest request = new CreateUserRequest();
         request.setUser(user);
 
-        var response = userPort.CreateUser(request);
-        return response;
+        return userPort.CreateUser(request);
     }
 
     public static void main(String[] args) throws Exception {
