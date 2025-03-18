@@ -29,6 +29,12 @@
             <artifactId>jaxws-rt</artifactId>
             <version>4.0.2</version>  <!-- Check for the latest version -->
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.36</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

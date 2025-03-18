@@ -1,9 +1,7 @@
 package com.solovev.soapclient;
 
 
-import com.solovev.soapclient.dto.soap.user.CreateUserRequest;
-import com.solovev.soapclient.dto.soap.user.GetUserRequest;
-import com.solovev.soapclient.model.User;
+import com.solovev.soapclient.generated.*;
 import jakarta.xml.ws.Service;
 import jakarta.xml.ws.WebServiceClient;
 
@@ -25,12 +23,12 @@ public class UserClient {
         service = Service.create(url, SERVICE_NAME);
     }
 
-    public Object getUser(Long userId) {
+    public GetUserResponse getUser(Long userId) {
         UserPort userPort = service.getPort(PORT_NAME, UserPort.class);
         GetUserRequest request = new GetUserRequest();
         request.setUserId(userId);
 
-        return userPort.GetUser(request);
+        return userPort.getUser(request);
 
     }
 
@@ -39,21 +37,23 @@ public class UserClient {
         CreateUserRequest request = new CreateUserRequest();
         request.setUser(user);
 
-        return userPort.CreateUser(request);
+        return userPort.createUser(request);
     }
 
     public static void main(String[] args) throws Exception {
         UserClient client = new UserClient();
-
+        GetUserResponse response = client.getUser(1L);
         // Example: Get a user
-        System.out.println(client.getUser(1L));
+        System.out.println(response);
 
+        System.out.println();
         // Example: Create a user
         User newUser = new User();
         newUser.setId(2L);
         newUser.setName("John");
         newUser.setSurname("Doe");
         newUser.setEmail("john.doe@example.com");
+        newUser.setTasks(new User.Tasks());
 
         System.out.println(client.createUser(newUser));
     }
