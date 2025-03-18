@@ -1,9 +1,10 @@
 package com.solovev.springrestsoap.endpoint;
 
-import com.solovev.springrestsoap.dto.soap.user.CreateUserRequest;
-import com.solovev.springrestsoap.dto.soap.user.DeleteUserRequest;
-import com.solovev.springrestsoap.dto.soap.user.GetUserRequest;
-import com.solovev.springrestsoap.dto.soap.user.GetUserResponse;
+import com.solovev.springrestsoap.dto.soap.generated.localhost._8080.user.CreateUserRequest;
+import com.solovev.springrestsoap.dto.soap.generated.localhost._8080.user.DeleteUserRequest;
+import com.solovev.springrestsoap.dto.soap.generated.localhost._8080.user.GetUserRequest;
+import com.solovev.springrestsoap.dto.soap.generated.localhost._8080.user.GetUserResponse;
+import com.solovev.springrestsoap.mapper.UserMapper;
 import com.solovev.springrestsoap.model.User;
 import com.solovev.springrestsoap.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.NoSuchElementException;
 public class UserEndpoint {
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @PayloadRoot(namespace = "http://localhost:8080/user", localPart = "GetUserRequest")
     @ResponsePayload
@@ -26,7 +28,7 @@ public class UserEndpoint {
         GetUserResponse response = new GetUserResponse();
 
         userService.getById(request.getUserId()).ifPresentOrElse(
-                response::setUser,
+                u -> response.setUser(userMapper.toDto(u)),
                 () -> {
                     throw new NoSuchElementException("No user with this id found");
                 }
@@ -39,7 +41,9 @@ public class UserEndpoint {
     @ResponsePayload
     public GetUserResponse createUser(@RequestPayload CreateUserRequest request) {
         GetUserResponse response = new GetUserResponse();
-        response.setUser(userService.save(request.getUser()));
+        User in = userMapper.toModel(request.getUser());
+        var out = userMapper.toDto(userService.save(in));
+        response.setUser(out);
         return response;
     }
 
@@ -48,7 +52,7 @@ public class UserEndpoint {
     public GetUserResponse deleteUser(@RequestPayload DeleteUserRequest request) throws NoSuchElementException {
         GetUserResponse response = new GetUserResponse();
         User toDelete = userService.getById(request.getUserId()).orElseThrow();
-        response.setUser(toDelete);
+        response.setUser(userMapper.toDto(toDelete));
         userService.deleteById(request.getUserId());
         return response;
     }
