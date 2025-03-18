@@ -30,6 +30,22 @@
             <version>4.0.2</version>  <!-- Check for the latest version -->
         </dependency>
     </dependencies>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.sun.xml.ws</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <wsdlUrls>
+                        <wsdlUrl>http://localhost:8080/ws/users.wsdl</wsdlUrl>
+                    </wsdlUrls>
+                    <keep>true</keep>
+                    <packageName>com.solovev.soapclient.generated</packageName>
+                    <sourceDestDir>src/main/java</sourceDestDir>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
