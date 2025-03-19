@@ -12,6 +12,7 @@
         <module>StreamApi</module>
         <module>Generics</module>
         <module>Patterns</module>
+        <module>ORMModels</module>
     </modules>
 
     <properties>
