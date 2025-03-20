@@ -1,4 +1,4 @@
-package com.solovev.dao.daoImplementations;
+package com.solovev.dao;
 
 import com.solovev.DBSetUpAndTearDown;
 import com.solovev.DataConstants;
@@ -17,7 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
-public class CategoriesDaoTest {
+public abstract class CategoriesDaoTest {
 
     @Test
     public void getByUserId() throws SQLException {
@@ -81,7 +81,9 @@ public class CategoriesDaoTest {
         dbSetUpAndTearDown.dbFactoryAndTablesTearDown();
     }
 
-    private final CategoriesDao categoriesDao = new CategoriesDao();
+    protected abstract CategoriesDao categoriesDao();
+
+    private final CategoriesDao categoriesDao = categoriesDao();
     private final DBSetUpAndTearDown dbSetUpAndTearDown = new DBSetUpAndTearDown();
     private final List<User> USERS = DataConstants.USERS;
     private final List<Category> CATEGORIES = DataConstants.CATEGORIES;

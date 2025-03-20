@@ -1,13 +1,13 @@
-package com.solovev.dao.daoImplementations;
+package com.solovev.dao.criteria;
 
-import com.solovev.dao.AbstractDAO;
+import com.solovev.dao.UserDao;
 import com.solovev.model.User;
 
 import java.util.Map;
 import java.util.Optional;
 
-public class UserDao extends AbstractDAO<User> {
-    public UserDao() {
+public class UserDaoCriteria extends CriteriaAbstractDAO<User> implements UserDao {
+    public UserDaoCriteria() {
         super(User.class);
     }
 

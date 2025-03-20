@@ -1,8 +1,7 @@
-package com.solovev.dao.daoImplementations;
+package com.solovev.dao;
 
 import com.solovev.DBSetUpAndTearDown;
 import com.solovev.DataConstants;
-import com.solovev.dao.DAO;
 import com.solovev.model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,20 +11,17 @@ import org.junit.jupiter.api.Test;
 import javax.persistence.Table;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-public class UserDaoTest {
+public abstract class UserDaoTest {
 
     @Test
     public void getByIdTest() {
-        DAO<User> userDAO = new UserDao();
         long maxUserId = USERS.size();
         long minUserId = 1;
 
@@ -44,7 +40,6 @@ public class UserDaoTest {
 
     @Test
     public void getAll() throws SQLException {
-        DAO<User> userDAO = new UserDao();
         assertEquals(USERS, userDAO.get());
 
         dbSetUpAndTearDown.clearTable(USERS_TABLE_NAME);
@@ -52,72 +47,8 @@ public class UserDaoTest {
         assertEquals(List.of(), userDAO.get());
     }
 
-    @Nested
-    public class getByParamTests {
-        @Test
-        public void getObjectByParamSuccess() {
-            DAO<User> userDAO = new UserDao();
-
-            assertEquals(USERS.get(0), userDAO.getObjectByParam("name", USERS.get(0).getName()).get());
-            assertEquals(USERS.get(1), userDAO.getObjectByParam("name", USERS.get(1).getName()).get());
-            assertEquals(USERS.get(0), userDAO.getObjectByParam("login", USERS.get(0).getLogin()).get());
-        }
-
-        @Test
-        public void getObjectByParamNotFound() {
-            DAO<User> userDAO = new UserDao();
-
-            assertEquals(Optional.empty(), userDAO.getObjectByParam("name", "non existent"));
-        }
-
-        @Test
-        public void getObjectsByParamSuccess() {
-            DAO<User> userDAO = new UserDao();
-            LocalDate today = LocalDate.now();
-
-            assertEquals(USERS, userDAO.getObjectsByParam(Map.of()));
-            assertEquals(USERS, userDAO.getObjectsByParam(Map.of("registrationDate", today)));
-        }
-
-        @Test
-        public void getUserByParamsSuccess() {
-            UserDao userDAO = new UserDao();
-            User userToFind = USERS.get(0);
-            String userLog = userToFind.getLogin();
-            String userPass = userToFind.getPassword();
-
-            assertEquals(userToFind, userDAO.getObjectByParam(Map.of("login", userLog, "password", userPass)).get());
-            assertEquals(userToFind, userDAO.getObjectByParam(Map.of("login", userLog)).get());
-        }
-
-        @Test
-        public void getUserByParamNotFound() {
-            UserDao userDAO = new UserDao();
-
-            User userToFind = USERS.get(0);
-            String userLog = userToFind.getLogin();
-            String userPass = userToFind.getPassword();
-            String nonExistentLog = userLog + " corrupted";
-            String nonExistentPass = userPass + " corrupted";
-
-
-            assertEquals(Optional.empty(),
-                    userDAO.getObjectByParam(Map.of("login", nonExistentLog)));
-            assertEquals(Optional.empty(),
-                    userDAO.getObjectByParam(Map.of("login", userLog, "password", nonExistentPass)));
-
-            assertEquals(Optional.empty(),
-                    userDAO.getObjectByParam(Map.of("login", nonExistentLog, "password", userPass)));
-            assertEquals(Optional.empty(),
-                    userDAO.getObjectByParam(Map.of("login", nonExistentLog, "password", nonExistentPass)));
-
-        }
-
-    }
-
     @Test
     public void getUserByLogAndPassSuccess() {
-        UserDao userDAO = new UserDao();
         User userToFind = USERS.get(1);
         String userLog = userToFind.getLogin();
         String userPass = userToFind.getPassword();
@@ -127,7 +58,6 @@ public class UserDaoTest {
 
     @Test
     public void getUserByLogAndPassNotFound() {
-        UserDao userDAO = new UserDao();
 
         User userToFind = USERS.get(1);
         String userLog = userToFind.getLogin();
@@ -145,7 +75,6 @@ public class UserDaoTest {
     public class cookieRelated {
         @Test
         public void getUserByIdAndHashSuccess() {
-            UserDao userDAO = new UserDao();
             User userToFind = USERS.get(0);
             String userId = String.valueOf(userToFind.getId());
             String userHash = userToFind.getCookieHash();
@@ -155,7 +84,6 @@ public class UserDaoTest {
 
         @Test
         public void getUserByIdAndHashNullHashFail() {
-            UserDao userDAO = new UserDao();
             User userToFind = USERS.get(1);
             String userId = String.valueOf(userToFind.getId());
             String userHash = userToFind.getCookieHash();
@@ -165,8 +93,6 @@ public class UserDaoTest {
 
         @Test
         public void getUserByLogAndCookieHashNotFound() {
-            UserDao userDAO = new UserDao();
-
             User userToFind = USERS.get(0);
             String userId = String.valueOf(userToFind.getId());
             String userHash = userToFind.getCookieHash();
@@ -181,7 +107,6 @@ public class UserDaoTest {
 
     @Test
     public void delete() throws SQLException {
-        DAO<User> userDAO = new UserDao();
         long idToDelete = 1;
         User userToDelete = USERS.get(0);
 
@@ -193,7 +118,6 @@ public class UserDaoTest {
 
     @Test
     public void changeIdTest() {
-        DAO<User> userDAO = new UserDao();
         User userToAdd = new User(-1, "addedLog", "addedPass", "addedName");
         int possibleAddedId = USERS.size() + 1;
 
@@ -204,7 +128,6 @@ public class UserDaoTest {
 
     @Test
     public void addSuccessful() throws SQLException {
-        DAO<User> userDAO = new UserDao();
         User userToAdd = new User(-1, "addedLog", "addedPass", "addedName");
         int possibleAddedId = USERS.size() + 1;
 
@@ -215,7 +138,6 @@ public class UserDaoTest {
 
     @Test
     public void addUnsuccessful() {
-        DAO<User> userDAO = new UserDao();
         User emptyUser = new User();
         User existingUser = USERS.get(0);
 
@@ -228,7 +150,6 @@ public class UserDaoTest {
 
     @Test
     public void updateSuccessful() throws SQLException {
-        DAO<User> userDAO = new UserDao();
         long idToUpdate = 1;
         User originalUser = userDAO.get(idToUpdate).orElse(null);
         User userUpdate = new User(idToUpdate, "updatedLog", "updatedPass", "updatedName");
@@ -241,7 +162,6 @@ public class UserDaoTest {
 
     @Test
     public void updateUnsuccessful() throws SQLException {
-        DAO<User> userDAO = new UserDao();
         long idToUpdate = 1;
         User originalUser = userDAO.get(idToUpdate).orElse(null);
         User emptyUser = new User();
@@ -271,6 +191,11 @@ public class UserDaoTest {
     public void tearDown() throws SQLException {
         dbSetUpAndTearDown.dbFactoryAndTablesTearDown();
     }
+
+
+    protected abstract UserDao getUserDao();
+
+    private final UserDao userDAO = getUserDao();
 
     private static final DBSetUpAndTearDown dbSetUpAndTearDown = new DBSetUpAndTearDown();
     private final List<User> USERS = DataConstants.USERS;
