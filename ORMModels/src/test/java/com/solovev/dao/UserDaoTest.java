@@ -40,7 +40,8 @@ public abstract class UserDaoTest {
 
     @Test
     public void getAll() throws SQLException {
-        assertEquals(USERS, userDAO.get());
+        var all = userDAO.get();
+        assertEquals(USERS, all);
 
         dbSetUpAndTearDown.clearTable(USERS_TABLE_NAME);
 
@@ -133,7 +134,7 @@ public abstract class UserDaoTest {
 
         assumeFalse(userDAO.get().contains(userToAdd));
         assertTrue(userDAO.add(userToAdd));
-        assertEquals(userToAdd, userDAO.get(possibleAddedId).get());
+        assertEquals(userDAO.get(possibleAddedId).get(), userToAdd);
     }
 
     @Test

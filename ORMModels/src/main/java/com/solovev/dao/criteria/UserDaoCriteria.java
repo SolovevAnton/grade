@@ -6,7 +6,7 @@ import com.solovev.model.User;
 import java.util.Map;
 import java.util.Optional;
 
-public class UserDaoCriteria extends CriteriaAbstractDAO<User> implements UserDao {
+public class UserDaoCriteria extends CriteriaAbstractDao<User> implements UserDao {
     public UserDaoCriteria() {
         super(User.class);
     }
