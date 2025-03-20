@@ -3,7 +3,6 @@ package com.solovev.dao;
 import com.solovev.dto.DaoEntity;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -24,41 +23,6 @@ public interface DAO<T extends DaoEntity> {
      * @return all rows in the table empty collection if nothing was found
      */
     Collection<T> get();
-
-    /**
-     * Gets single object by matching single param
-     *
-     * @param paramName name of the param to match
-     * @param param     value to match
-     * @return single result, or throws if result is more than one
-     */
-    <U> Optional<T> getObjectByParam(String paramName, U param);
-
-    /**
-     * Gets one object matching given params;
-     * Empty Map will result in getting all entities     *
-     *
-     * @param paramNamesAndValues map of param names and theirs values, analog of WHERE a="A" AND b="B" AND...
-     * @return matching object or empty if none match
-     */
-    Optional<T> getObjectByParam(Map<String, Object> paramNamesAndValues);
-
-    /**
-     * Gets collection of objects matching single param
-     *
-     * @param paramName name of the param to match
-     * @param param     value to match
-     * @return list of results, matching the criteria
-     */
-    <U> Collection<T> getObjectsByParam(String paramName, U param);
-
-    /**
-     * Gets all object matching given params
-     *
-     * @param paramNamesAndValues map of param names and theirs values, analog of WHERE a="A" AND b="B" AND...
-     * @return matching objects
-     */
-    Collection<T> getObjectsByParam(Map<String, Object> paramNamesAndValues);
 
     /**
      * Adds elem in DB

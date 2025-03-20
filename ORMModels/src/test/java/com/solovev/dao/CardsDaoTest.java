@@ -1,4 +1,4 @@
-package com.solovev.dao.daoImplementations;
+package com.solovev.dao;
 
 import com.solovev.DBSetUpAndTearDown;
 import com.solovev.DataConstants;
@@ -18,7 +18,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
-public class CardsDaoTest {
+public abstract class CardsDaoTest {
 
     @Test
     public void getByCategory() {
@@ -111,7 +111,9 @@ public class CardsDaoTest {
         dbSetUpAndTearDown.dbFactoryAndTablesTearDown();
     }
 
-    private final CardsDao cardsDao = new CardsDao();
+    protected abstract CardsDao getCardsDao();
+
+    private final CardsDao cardsDao = getCardsDao();
     private final DBSetUpAndTearDown dbSetUpAndTearDown = new DBSetUpAndTearDown();
     private final List<User> USERS = DataConstants.USERS;
     private final List<Category> CATEGORIES = DataConstants.CATEGORIES;

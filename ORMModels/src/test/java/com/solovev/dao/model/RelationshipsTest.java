@@ -3,9 +3,9 @@ package com.solovev.dao.model;
 
 import com.solovev.DBSetUpAndTearDown;
 import com.solovev.DataConstants;
-import com.solovev.dao.daoImplementations.CardsDao;
-import com.solovev.dao.daoImplementations.CategoriesDao;
-import com.solovev.dao.daoImplementations.UserDao;
+import com.solovev.dao.CardsDao;
+import com.solovev.dao.CategoriesDao;
+import com.solovev.dao.UserDao;
 import com.solovev.model.Card;
 import com.solovev.model.Category;
 import com.solovev.model.User;
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 /**
  * Class to test one to many or many to one etc relationships between models
  */
-public class RelationshipsTest {
+public abstract class RelationshipsTest {
 
     @Test
     public void addingTest() throws SQLException {
@@ -128,9 +128,15 @@ public class RelationshipsTest {
         dbSetUpAndTearDown.dbFactoryAndTablesTearDown();
     }
 
-    private final UserDao userDao = new UserDao();
-    private final CategoriesDao categoriesDao = new CategoriesDao();
-    private final CardsDao cardsDao = new CardsDao();
+    abstract UserDao userDao();
+
+    abstract CategoriesDao categoriesDao();
+
+    abstract CardsDao cardsDao();
+
+    private final UserDao userDao = userDao();
+    private final CategoriesDao categoriesDao = categoriesDao();
+    private final CardsDao cardsDao = cardsDao();
     private final DBSetUpAndTearDown dbSetUpAndTearDown = new DBSetUpAndTearDown();
     private final List<User> USERS = DataConstants.USERS;
     private final List<Category> CATEGORIES = DataConstants.CATEGORIES;

@@ -1,5 +1,7 @@
-package com.solovev.dao;
+package com.solovev.dao.criteria;
 
+import com.solovev.dao.DAO;
+import com.solovev.dao.SessionDecorator;
 import com.solovev.dto.DaoEntity;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.PropertyValueException;
@@ -26,7 +28,7 @@ import java.util.function.Function;
  * DB is chosen based on the SessionFactorySingleton parameters
  */
 @RequiredArgsConstructor
-public abstract class AbstractDAO<T extends DaoEntity> implements DAO<T> {
+public abstract class CriteriaAbstractDAO<T extends DaoEntity> implements DAO<T> {
 
     private final Class<T> self;
 
@@ -49,13 +51,25 @@ public abstract class AbstractDAO<T extends DaoEntity> implements DAO<T> {
         return getObjectsByParam(Map.of());
     }
 
-    @Override
-    public <U> Optional<T> getObjectByParam(String paramName, U param) {
+    /**
+     * Gets single object by matching single param
+     *
+     * @param paramName name of the param to match
+     * @param param     value to match
+     * @return single result, or throws if result is more than one
+     */
+    protected <U> Optional<T> getObjectByParam(String paramName, U param) {
         return getObjectByParam(Map.of(paramName, param));
     }
 
-    @Override
-    public Optional<T> getObjectByParam(Map<String, Object> paramNamesAndValues) {
+    /**
+     * Gets one object matching given params;
+     * Empty Map will result in getting all entities     *
+     *
+     * @param paramNamesAndValues map of param names and theirs values, analog of WHERE a="A" AND b="B" AND...
+     * @return matching object or empty if none match
+     */
+    protected Optional<T> getObjectByParam(Map<String, Object> paramNamesAndValues) {
         Optional<T> result;
         try (SessionDecorator sessionDecorator = new SessionDecorator()) {
             result = Optional.of(createQuery(sessionDecorator, paramNamesAndValues)
@@ -66,13 +80,24 @@ public abstract class AbstractDAO<T extends DaoEntity> implements DAO<T> {
         return result;
     }
 
-    @Override
-    public <U> Collection<T> getObjectsByParam(String paramName, U param) {
+    /**
+     * Gets collection of objects matching single param
+     *
+     * @param paramName name of the param to match
+     * @param param     value to match
+     * @return list of results, matching the criteria
+     */
+    protected <U> Collection<T> getObjectsByParam(String paramName, U param) {
         return getObjectsByParam(Map.of(paramName, param));
     }
 
-    @Override
-    public Collection<T> getObjectsByParam(Map<String, Object> paramNamesAndValues) {
+    /**
+     * Gets all object matching given params
+     *
+     * @param paramNamesAndValues map of param names and theirs values, analog of WHERE a="A" AND b="B" AND...
+     * @return matching objects
+     */
+    protected Collection<T> getObjectsByParam(Map<String, Object> paramNamesAndValues) {
         try (SessionDecorator sessionDecorator = new SessionDecorator()) {
             return createQuery(sessionDecorator, paramNamesAndValues)
                     .getResultList();
