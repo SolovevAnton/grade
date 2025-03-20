@@ -1,6 +1,5 @@
 package com.solovev.model;
 
-import com.solovev.dto.DaoEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,6 +11,27 @@ import java.util.List;
 @NoArgsConstructor(force = true)
 @Entity
 @Table(name = "users")
+@NamedQueries({
+        @NamedQuery(name = "User_getAll", query = "from User"),
+        @NamedQuery(name = "User_getById", query = "from User where id = :id"),
+        @NamedQuery(name = "User_getByLogAndPass", query = "from User where login= :login and password= :password"),
+        @NamedQuery(name = "User_getByHashAndId", query = "from User where cookieHash= :cookieHash and id= :id"),
+        @NamedQuery(
+                name = "User_update",
+                query = """
+                        UPDATE User u
+                        SET u.login = :login, u.password = :password, u.name = :name, u.cookieHash = :cookieHash, u.registrationDate = :registrationDate
+                        WHERE u.id = :id
+                        """
+        ),
+        @NamedQuery(
+                name = "User_delete",
+                query = "DELETE FROM User u WHERE u.id = :id"
+        )
+})
+@NamedNativeQuery(
+        name = "User_insert",
+        query = "INSERT INTO users (login, password, name, registration_date, cookie_hash) VALUES (:login, :password, :name, :registrationDate, :cookieHash)")
 public class User implements DaoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

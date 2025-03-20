@@ -7,7 +7,7 @@ import com.solovev.model.Category;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class CardsDaoCriteria extends CriteriaAbstractDAO<Card> implements
+public class CardsDaoCriteria extends CriteriaAbstractDao<Card> implements
         CardsDao {
     public CardsDaoCriteria() {
         super(Card.class);

@@ -1,6 +1,6 @@
 package com.solovev.dao;
 
-import com.solovev.dto.DaoEntity;
+import com.solovev.model.DaoEntity;
 
 import java.util.Collection;
 import java.util.Optional;

@@ -1,6 +1,5 @@
 package com.solovev.model;
 
-import com.solovev.dto.DaoEntity;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;

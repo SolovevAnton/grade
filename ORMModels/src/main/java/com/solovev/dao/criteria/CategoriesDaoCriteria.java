@@ -5,7 +5,7 @@ import com.solovev.model.Category;
 
 import java.util.Collection;
 
-public class CategoriesDaoCriteria extends CriteriaAbstractDAO<Category> implements CategoriesDao {
+public class CategoriesDaoCriteria extends CriteriaAbstractDao<Category> implements CategoriesDao {
     public CategoriesDaoCriteria() {
         super(Category.class);
     }

@@ -6,6 +6,7 @@ import org.hibernate.Transaction;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class SessionDecorator implements AutoCloseable {
     private final Session session = SessionFactorySingleton.getInstance().openSession();
@@ -45,6 +46,18 @@ public class SessionDecorator implements AutoCloseable {
         try {
             methodToExecute.accept(session);
             transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            throw e;
+        }
+    }
+
+    public int beginAndCommitTransactionUpdateQuery(Supplier<Integer> methodToExecute) {
+        Transaction transaction = session.beginTransaction();
+        try {
+            int result = methodToExecute.get();
+            transaction.commit();
+            return result;
         } catch (Exception e) {
             transaction.rollback();
             throw e;

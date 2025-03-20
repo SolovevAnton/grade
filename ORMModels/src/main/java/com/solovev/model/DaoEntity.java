@@ -1,4 +1,4 @@
-package com.solovev.dto;
+package com.solovev.model;
 
 /**
  * Interface for working with DB entities to get and set id
