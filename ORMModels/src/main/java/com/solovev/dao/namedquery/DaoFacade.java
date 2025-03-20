@@ -48,7 +48,7 @@ public class DaoFacade<T extends DaoEntity> {
         }
     }
 
-    public long executeNativeUpdate(String queryName, Map<String, Object> params, T entity) {
+    public long executeNativeUpdate(String queryName, Map<String, Object> params) {
         try (SessionDecorator decorator = new SessionDecorator()) {
             Query<T> updateQuery = decorator.getSession().getNamedNativeQuery(queryName);
             params.forEach(updateQuery::setParameter);
