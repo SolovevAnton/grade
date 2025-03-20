@@ -37,7 +37,7 @@ public class UserDaoNamedQuery implements UserDao {
     @Override
     public boolean add(User elem) throws IllegalArgumentException {
         Map<String, Object> userMap = getUserMap(elem);
-        var id = daoFacade.executeNativeUpdate("User_insert", userMap, elem);
+        var id = daoFacade.executeNativeUpdate("User_insert", userMap);
         elem.setId(id);
         return true;
     }
