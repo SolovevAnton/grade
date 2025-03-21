@@ -42,7 +42,7 @@ public class CategoriesDaoNamedQuery implements CategoriesDao {
     public Optional<Category> delete(long id) {
         var found = get(id);
         found.ifPresent(__ -> daoFacade.executeNamedUpdate("Category_delete", Map.of("id", id)));
-        return Optional.empty();
+        return found;
     }
 
     @Override

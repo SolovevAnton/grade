@@ -17,6 +17,27 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "cards",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"question", "answer", "category_id"})})
+@NamedQueries({
+        @NamedQuery(name = "Card_getAll", query = "from Card"),
+        @NamedQuery(name = "Card_getById", query = "from Card where id = :id"),
+        @NamedQuery(name = "Card_getByCategory", query = "from Card where category= :category"),
+        @NamedQuery(name = "Card_getByUser", query = "SELECT c FROM Card c JOIN c.category cat WHERE cat.user = :user"),
+        @NamedQuery(
+                name = "Card_update",
+                query = """
+                        UPDATE Card
+                        SET question = :question, answer = :answer, category = :category, creationDate= :creationDate
+                        WHERE id = :id
+                        """),
+        @NamedQuery(
+                name = "Card_delete",
+                query = "DELETE FROM Card WHERE id = :id"
+        )
+})
+@NamedNativeQuery(
+        name = "Card_insert",
+        query = "INSERT INTO cards (question, answer, category_id, creation_date) VALUES (:question, :answer, :category_id, :creation_date)"
+)
 public class Card implements DaoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
