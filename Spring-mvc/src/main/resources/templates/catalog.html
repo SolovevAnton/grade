@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Catalog of Kites</title>
+</head>
+<body>
+<h1>All the kites we have</h1>
+
+<a href="/cart">To cart</a>
+<a href="/order">My Orders</a>
+<!-- Sorting Dropdown Menu -->
+<form method="get">
+    <label for="sort">Sort by:</label>
+    <select id="sort" name="sort">
+        <option value="">name a-z</option>
+        <option value="model,desc">name z-a</option>
+        <option value="price,asc">from cheap to expensive</option>
+        <option value="price,desc">from expensive to cheap</option>
+        <option value="productionYear,asc">from old to new</option>
+        <option value="productionYear,desc">from new to old</option>
+    </select>
+    <button type="submit">Sort</button>
+</form>
+<div th:each="product : ${products}">
+    <div th:object="${product}">
+        <h4>Brand: <span th:text="${product.brand}"></span></h4>
+        <p>Model: <span th:text="${product.model}"></span></p>
+        <p>Size: <span th:text="${product.size}"></span></p>
+        <p>Year: <span th:text="${product.productionYear}"></span></p>
+        <p>Price: <span th:text="${product.price}"></span></p>
+        <!-- Quantity Input and Add to Cart Button -->
+        <form th:action="'/cart/' + ${product.id}" th:method="post">
+            <label for="quantity">Quantity:</label>
+            <input id="quantity" name="quantity" type="number" min="1" max="999" required>
+            <button type="submit">Add to Cart</button>
+        </form>
+        <div th:if="${cart.getQuantity(product.id) != 0}">
+            <p>Current quantity in cart: <span th:text="${cart.getQuantity(product.id)}"></span></p>
+        </div>
+        <div th::if="${cart.getQuantity(product.id) == 0}">
+            <p>Your cart is empty</p>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

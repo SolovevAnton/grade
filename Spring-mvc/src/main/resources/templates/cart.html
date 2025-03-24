@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Cart</title>
+</head>
+<body>
+<h1>Kites in your cart:</h1>
+
+<div th:each="product : ${products.entrySet()}">
+    <div th:object="${product}" th:with="item=${product.key}">
+        <h4>Brand: <span th:text="${item.brand}"></span></h4>
+        <p>Model: <span th:text="${item.model}"></span></p>
+        <p>Size: <span th:text="${item.size}"></span></p>
+        <p>Year: <span th:text="${item.productionYear}"></span></p>
+        <p>Price: <span th:text="${item.price}"></span></p>
+
+        <!-- Quantity -->
+        <form th:object="${product}" th:method="put">
+            <label for="quantity">Quantity:</label>
+            <input id="quantity" type="number" min="1" max="999" required th:value="${product.value}">
+            <button type="submit">Modify quantity</button>
+        </form>
+    </div>
+</div>
+<form th:action="'/order'" th:method='post' th:if="${!products.isEmpty()}">
+    <button type="submit">Place Order</button>
+</form>
+<a href="/catalog">Shop more</a>
+</body>
+
+</html>

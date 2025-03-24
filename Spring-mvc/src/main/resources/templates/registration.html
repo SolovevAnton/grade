@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kite Shop</title>
+</head>
+<body>
+<h2>Registration Form</h2>
+<p>Have an account? Click
+    <a th:href="@{/login}">here to sign in.</a></p>
+
+<form method="POST" action="/registration" id="registerForm">
+    <label for="username">Username:</label><br>
+    <input type="text" id="username" name="username" required><br><br>
+
+    <div th:if="${errorMessage}">
+        <p th:text="${errorMessage}" style="color: red;"></p>
+    </div>
+
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password" required><br><br>
+
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email"><br><br>
+
+    <label for="phoneNumber">Phone Number:</label><br>
+    <input type="text" id="phoneNumber" name="phoneNumber"><br><br>
+
+    <input type="submit">
+    <input type="reset">
+</form>
+</body>
+</html>

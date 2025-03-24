@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Order</title>
+</head>
+<body>
+<h3>Order for:</h3>
+<div th:insert="~{fragments/general.html :: userDetails}"></div>
+<h3>Order info:</h3>
+<div th:insert="~{fragments/general.html :: orderInfo}"></div>
+<div th:insert="~{fragments/general.html :: orderDetails}"></div>
+<a href="/catalog">Shop more</a>
+<a href="/order">To Order history</a>
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+###
+GET http://localhost:8080/user
+
+###
+POST http://localhost:8080/user
+content-type:application/json
+
+{
+  "login": "tested6",
+  "passHash": {
+    "salt": 1,
+    "hashResult": 100
+  }
+}

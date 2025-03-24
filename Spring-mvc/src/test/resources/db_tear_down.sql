@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS order_positions;
+DROP TABLE IF EXISTS user_authorities;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS authorities;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS users;

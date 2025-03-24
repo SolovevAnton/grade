@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Info about order</title>
+</head>
+<body>
+
+<div th:fragment="userDetails">
+    <div th:object="${user}">
+        <p>User: <span th:text="${user.getUsername()}"></span></p>
+        <p>Email: <span th:text="${user.getEmail() ?: 'not defined'}"></span></p>
+        <p>Phone: <span th:text="${user.getPhoneNumber() ?: 'not defined'}"></span></p>
+        <div th:if="${user.hasAuthority('ADMIN')}">
+            you have ADMIN authority
+        </div>
+        <form method="POST" action="/logout">
+            <button type="submit"> LogOut</button>
+        </form>
+    </div>
+</div>
+
+<div th:fragment="orderInfo">
+    <p>Number: <span th:text="${order.id}"></span></p>
+    <p>Status: <span th:text="${order.status}"></span></p>
+    <p>Created: <span th:text="${order.created}"></span></p>
+    <p>Last modified: <span th:text="${order.updated}"></span></p>
+    <a th:href="'/order/' + ${order.id}">See order details</a>
+</div>
+
+<div th:fragment="orderDetails">
+    <h3>Kites in your Order:</h3>
+    <div th:each="orderPosition : ${order.getOrderPositions()}">
+        <div th:object="${orderPosition}" th:with="item=${orderPosition.product}">
+            <h4>Brand: <span th:text="${item.brand}"></span></h4>
+            <p>Model: <span th:text="${item.model}"></span></p>
+            <p>Size: <span th:text="${item.size}"></span></p>
+            <p>Year: <span th:text="${item.productionYear}"></span></p>
+            <p>Price: <span th:text="${item.price}"></span></p>
+
+            <!-- Quantity -->
+            <div th:if="${orderPosition.getQuantity() > 0}">
+                <form th:object="${orderPosition}"
+                      th:if="${order.isRegistered()}">
+                    <label for="quantity">Quantity:</label>
+                    <input id="quantity" type="number" min="1" max="999" required th:value="${orderPosition.quantity}">
+                    <button type="submit">Modify quantity</button>
+                </form>
+                <div th:object="${orderPosition}"
+                     th:if="${!order.isRegistered()}">
+                    <label>Quantity:</label>
+                    <span th:text="${orderPosition.quantity}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
