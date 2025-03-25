@@ -30,7 +30,7 @@ public class Product {
     @Column(nullable = false, name = "PRICE")
     private BigDecimal price;
 
-    @Column(nullable = false, name = "SIZE")
+    @Column(nullable = false, name = "SIZE", columnDefinition = "SMALLINT")
     private byte size;
 
     @NonNull

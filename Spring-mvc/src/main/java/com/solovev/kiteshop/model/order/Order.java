@@ -28,7 +28,9 @@ public class Order extends AuditableEntity {
     @JoinColumn(name = "USER_ID")
     @NonNull
     private User user;
-    @Column(nullable = false, name = "STATUS")
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false, name = "STATUS", columnDefinition = "SMALLINT")
     private Status status = Status.REGISTERED;
 
     public boolean isRegistered() {

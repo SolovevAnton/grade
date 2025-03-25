@@ -7,9 +7,9 @@ import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "USERS")
@@ -50,7 +50,7 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "USER_ID"),
             inverseJoinColumns = @JoinColumn(name = "AUTHORITY_ID")
     )
-    private final Collection<Authority> authorities = new HashSet<>();
+    private final Set<Authority> authorities = new HashSet<>();
 
     public boolean addAuthority(Authority grantedAuthority) {
         return authorities.add(grantedAuthority);
