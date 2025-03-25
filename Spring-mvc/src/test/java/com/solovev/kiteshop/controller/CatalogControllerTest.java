@@ -3,7 +3,9 @@ package com.solovev.kiteshop.controller;
 import com.solovev.kiteshop.common.APINamings;
 import com.solovev.kiteshop.config.SessionAttributesControllerAdvice;
 import com.solovev.kiteshop.model.order.Cart;
+import com.solovev.kiteshop.model.product.Product;
 import com.solovev.kiteshop.service.ProductService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,11 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.stream.Stream;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -38,21 +40,28 @@ public class CatalogControllerTest {
         private static final String SORT_ARGUMENT_NAME = "sort";
         private static final String CORRUPTED_SORT_PARAMETER = "nonExistingField";
 
-        private static Stream<Arguments> provideParameterValuesAnsSorts() {
-            return Stream.of(
-                    Arguments.of("model,desc", Sort.by("model").descending()),
-                    Arguments.of("price,asc", Sort.by("price").ascending()),
-                    Arguments.of("price,desc", Sort.by("price").descending()),
-                    Arguments.of("productionYear,asc", Sort.by("productionYear").ascending()),
-                    Arguments.of("productionYear,desc", Sort.by("productionYear").descending()));
+        private static List<Arguments> provideParameterValuesAnsSorts() {
+            return List.of(
+                    Arguments.of("0", "1", "model,desc", PageRequest.of(0, 1, Sort.by("model").descending())),
+                    Arguments.of("0", "1", "price,asc", PageRequest.of(0, 1, Sort.by("price").ascending())),
+                    Arguments.of("0", "1", "price,desc", PageRequest.of(0, 1, Sort.by("price").descending())),
+                    Arguments.of("0", "1", "productionYear,asc",
+                            PageRequest.of(0, 1, Sort.by("productionYear").ascending())),
+                    Arguments.of("0", "1", "productionYear,desc",
+                            PageRequest.of(0, 1, Sort.by("productionYear").descending())));
         }
 
         @ParameterizedTest
         @MethodSource("provideParameterValuesAnsSorts")
-        public void argumentsShouldFormCorrectSortAndReturnOkStatus(String sortParameterValues, Sort expectedSort)
+        public void argumentsShouldFormCorrectSortAndReturnOkStatus(String page, String size,
+                                                                    String sortParameterValues, Pageable expectedSort)
                 throws Exception {
+
             //given
-            var requestBuilder = get(APINamings.CATALOG).param(SORT_ARGUMENT_NAME, sortParameterValues);
+            var requestBuilder = get(APINamings.CATALOG)
+                    .param("page", page)
+                    .param("size", size)
+                    .param(SORT_ARGUMENT_NAME, sortParameterValues);
             //when
             mockMvc.perform(requestBuilder)
                     .andExpect(status().isOk());
@@ -63,8 +72,7 @@ public class CatalogControllerTest {
         @Test
         public void sortWithNonExistentFieldShouldReturnBadRequest() throws Exception {
             //given
-            Sort expectedCorruptedSort = Sort.by(CORRUPTED_SORT_PARAMETER);
-            when(productService.get(expectedCorruptedSort)).thenThrow(PropertyReferenceException.class);
+            when(productService.get(any(Pageable.class))).thenThrow(PropertyReferenceException.class);
             var requestBuilder = get(APINamings.CATALOG).param(SORT_ARGUMENT_NAME, CORRUPTED_SORT_PARAMETER);
             //when
             mockMvc.perform(requestBuilder)
@@ -73,25 +81,24 @@ public class CatalogControllerTest {
 
         @Test
         public void sortNotMappedCorrectlyFormArgumentsShouldResultInDefaultSort() throws Exception {
-            Sort expectedDefaultSort = Sort.by("model");
             var requestBuilder = get(APINamings.CATALOG).param("sortByCorrupted", "price,desc");
             //when
             mockMvc.perform(requestBuilder)
                     .andExpect(status().isOk());
             //then
-            verify(productService, times(1)).get(expectedDefaultSort);
+            verify(productService, times(1)).get(expectedDefaultPage);
         }
 
         @Test
         public void NoArgumentsShouldResultInDefaultSort() throws Exception {
-            Sort expectedDefaultSort = Sort.by("model");
             var requestBuilder = get(APINamings.CATALOG);
             //when
             mockMvc.perform(requestBuilder)
                     .andExpect(status().isOk());
             //then
-            verify(productService, times(1)).get(expectedDefaultSort);
+            verify(productService, times(1)).get(expectedDefaultPage);
         }
+
     }
 
     @Nested
@@ -128,5 +135,15 @@ public class CatalogControllerTest {
             //test its empty cart
             assertEquals(new Cart(), cartInSession);
         }
+
+    }
+
+    private final Pageable expectedDefaultPage = PageRequest.of(0, 10, Sort.by("productionYear").descending());
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        Page<Product> result = new PageImpl<>(List.of(mock(Product.class)), expectedDefaultPage, 0);
+
+        when(productService.get(any(Pageable.class))).thenReturn(result);
     }
 }

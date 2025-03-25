@@ -13,12 +13,15 @@
 <form method="get">
     <label for="sort">Sort by:</label>
     <select id="sort" name="sort">
-        <option value="">name a-z</option>
-        <option value="model,desc">name z-a</option>
-        <option value="price,asc">from cheap to expensive</option>
-        <option value="price,desc">from expensive to cheap</option>
-        <option value="productionYear,asc">from old to new</option>
-        <option value="productionYear,desc">from new to old</option>
+        <option value="model,asc" th:selected="${selectedSort == 'model,ASC'}">name a-z</option>
+        <
+        <option value="model,desc" th:selected="${selectedSort == 'model,DESC'}">name z-a</option>
+        <option value="price,asc" th:selected="${selectedSort == 'price,ASC'}">from cheap to expensive</option>
+        <option value="price,desc" th:selected="${selectedSort == 'price,DESC'}">from expensive to cheap</option>
+        <option value="productionYear,asc" th:selected="${selectedSort == 'productionYear,ASC'}">from old to new
+        </option>
+        <option value="productionYear,desc" th:selected="${selectedSort == 'productionYear,DESC'}">from new to old
+        </option>
     </select>
     <button type="submit">Sort</button>
 </form>
@@ -44,5 +47,13 @@
     </div>
 </div>
 </body>
+
+<!-- Pagination Controls -->
+<div>
+    <a th:if="${currentPage > 0}" th:href="@{/catalog(page=${currentPage - 1}, sort=${selectedSort})}">Previous</a>
+    <span>Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span></span>
+    <a th:if="${currentPage + 1 < totalPages}"
+       th:href="@{/catalog(page=${currentPage + 1}, sort=${selectedSort})}">Next</a>
+</div>
 
 </html>

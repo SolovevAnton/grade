@@ -4,7 +4,8 @@ import com.solovev.kiteshop.model.order.Cart;
 import com.solovev.kiteshop.model.product.Product;
 import com.solovev.kiteshop.repository.ProductRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +25,8 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<Product> get(Sort sort) {
-        return productRepo.findAll(sort);
+    public Page<Product> get(Pageable pageable) {
+        return productRepo.findAll(pageable);
     }
 
     /**
