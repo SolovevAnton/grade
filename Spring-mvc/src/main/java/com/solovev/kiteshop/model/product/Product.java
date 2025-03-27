@@ -42,6 +42,7 @@ public class Product {
     @Column(nullable = false, name = "BRAND")
     private Brand brand;
 
+
     public Product(@NonNull String model, @NonNull BigDecimal price, byte size, @NonNull Year productionYear,
                    @NonNull Brand brand) {
         this.model = model;

@@ -21,6 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static com.solovev.kiteshop.common.PageableDefaultConfig.DEFAULT_PAGE_SIZE;
+import static com.solovev.kiteshop.common.PageableDefaultConfig.SORT_COLUMN;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -138,7 +140,8 @@ public class CatalogControllerTest {
 
     }
 
-    private final Pageable expectedDefaultPage = PageRequest.of(0, 10, Sort.by("productionYear").descending());
+    private final Pageable expectedDefaultPage =
+            PageRequest.of(0, DEFAULT_PAGE_SIZE, Sort.by(SORT_COLUMN).descending());
 
     @BeforeEach
     public void setUp() throws Exception {

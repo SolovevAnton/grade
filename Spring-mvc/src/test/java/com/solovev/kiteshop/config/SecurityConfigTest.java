@@ -3,11 +3,13 @@ package com.solovev.kiteshop.config;
 import com.solovev.kiteshop.common.APINamings;
 import com.solovev.kiteshop.model.order.Cart;
 import com.solovev.kiteshop.model.order.Order;
+import com.solovev.kiteshop.model.product.Product;
 import com.solovev.kiteshop.model.user.User;
 import com.solovev.kiteshop.service.OrderPositionService;
 import com.solovev.kiteshop.service.OrderService;
 import com.solovev.kiteshop.service.ProductService;
 import com.solovev.kiteshop.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +19,17 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.*;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.NestedTestConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
+import static com.solovev.kiteshop.common.PageableDefaultConfig.DEFAULT_PAGE_SIZE;
+import static com.solovev.kiteshop.common.PageableDefaultConfig.SORT_COLUMN;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -155,4 +163,13 @@ class SecurityConfigTest {
         }
     }
 
+    private final Pageable expectedDefaultPage =
+            PageRequest.of(0, DEFAULT_PAGE_SIZE, Sort.by(SORT_COLUMN).descending());
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        Page<Product> result = new PageImpl<>(List.of(mock(Product.class)), expectedDefaultPage, 0);
+
+        when(productService.get(any(Pageable.class))).thenReturn(result);
+    }
 }

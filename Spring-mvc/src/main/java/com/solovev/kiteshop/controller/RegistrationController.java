@@ -5,12 +5,13 @@ import com.solovev.kiteshop.common.TemplatesNamings;
 import com.solovev.kiteshop.dto.RegistrationForm;
 import com.solovev.kiteshop.exception.UserAlreadyExistsException;
 import com.solovev.kiteshop.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping(APINamings.REGISTRATION)
@@ -21,13 +22,20 @@ public class RegistrationController {
 
     @GetMapping
     public ModelAndView getPage() {
-        return new ModelAndView(TemplatesNamings.REGISTER);
+        ModelAndView modelAndView = new ModelAndView(TemplatesNamings.REGISTER);
+        modelAndView.addObject("registrationForm", new RegistrationForm()); // Ensure form is in model
+        return modelAndView;
     }
 
     @PostMapping
-    public RedirectView register(RegistrationForm registrationForm) {
+    public ModelAndView register(@Valid @ModelAttribute RegistrationForm registrationForm, BindingResult result) {
+        if (result.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView(TemplatesNamings.REGISTER);
+            modelAndView.addObject("registrationForm", registrationForm);
+            return modelAndView;
+        }
         userService.save(registrationForm.toUser(encoder));
-        return new RedirectView(APINamings.LOGIN);
+        return new ModelAndView("redirect:" + APINamings.LOGIN);
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
