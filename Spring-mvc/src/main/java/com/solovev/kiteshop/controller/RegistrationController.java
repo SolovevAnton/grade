@@ -9,7 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,8 +28,8 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public ModelAndView register(@Valid @ModelAttribute RegistrationForm registrationForm, BindingResult result) {
-        if (result.hasErrors()) {
+    public ModelAndView register(@Valid @ModelAttribute RegistrationForm registrationForm, Errors errors) {
+        if (errors.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView(TemplatesNamings.REGISTER);
             modelAndView.addObject("registrationForm", registrationForm);
             return modelAndView;

@@ -1,7 +1,7 @@
 package com.solovev.kiteshop.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solovev.kiteshop.common.APINamings;
+import com.solovev.kiteshop.common.TemplatesNamings;
 import com.solovev.kiteshop.dto.RegistrationForm;
 import com.solovev.kiteshop.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(RegistrationController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -26,9 +26,6 @@ public class RegistrationControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @MockBean
     private PasswordEncoder encoder;
@@ -46,7 +43,7 @@ public class RegistrationControllerTest {
     }
 
     @Test
-    void shouldReturnBadRequestWhenUsernameIsBlank() throws Exception {
+    void shouldReturnRegistrationPageWithErrorsWhenUsernameIsBlank() throws Exception {
         RegistrationForm form = new RegistrationForm();
         form.setUsername(""); // Invalid
         form.setPassword("SecurePass123");
@@ -54,11 +51,13 @@ public class RegistrationControllerTest {
         form.setPhoneNumber("+1234567890");
 
         performRegistration(form)
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("registrationForm", "username"))
+                .andExpect(view().name(TemplatesNamings.REGISTER));
     }
 
     @Test
-    void shouldReturnBadRequestWhenPasswordIsTooShort() throws Exception {
+    void shouldReturnRegistrationPageWithErrorsWhenPasswordIsTooShort() throws Exception {
         RegistrationForm form = new RegistrationForm();
         form.setUsername("validUser");
         form.setPassword("short"); // Invalid
@@ -66,11 +65,13 @@ public class RegistrationControllerTest {
         form.setPhoneNumber("+1234567890");
 
         performRegistration(form)
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("registrationForm", "password"))
+                .andExpect(view().name(TemplatesNamings.REGISTER));
     }
 
     @Test
-    void shouldReturnBadRequestWhenEmailIsInvalid() throws Exception {
+    void shouldReturnRegistrationPageWithErrorsWhenEmailIsInvalid() throws Exception {
         RegistrationForm form = new RegistrationForm();
         form.setUsername("validUser");
         form.setPassword("SecurePass123");
@@ -78,11 +79,13 @@ public class RegistrationControllerTest {
         form.setPhoneNumber("+1234567890");
 
         performRegistration(form)
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("registrationForm", "email"))
+                .andExpect(view().name(TemplatesNamings.REGISTER));
     }
 
     @Test
-    void shouldReturnBadRequestWhenPhoneNumberIsInvalid() throws Exception {
+    void shouldReturnRegistrationPageWithErrorsWhenPhoneNumberIsInvalid() throws Exception {
         RegistrationForm form = new RegistrationForm();
         form.setUsername("validUser");
         form.setPassword("SecurePass123");
@@ -90,11 +93,15 @@ public class RegistrationControllerTest {
         form.setPhoneNumber("12345"); // Invalid
 
         performRegistration(form)
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("registrationForm", "phoneNumber"))
+                .andExpect(view().name(TemplatesNamings.REGISTER));
     }
 
     @Test
-    void shouldReturnRedirectWhenAllFieldsAreValid() throws Exception {
+    void shouldRedirectToLoginWhenAllFieldsAreValid() throws Exception {
+        when(encoder.encode(any())).thenReturn("encodedPassHashStuff");
+
         RegistrationForm form = new RegistrationForm();
         form.setUsername("validUser");
         form.setPassword("SecurePass123");
@@ -102,7 +109,8 @@ public class RegistrationControllerTest {
         form.setPhoneNumber("+1234567890");
 
         performRegistration(form)
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(APINamings.LOGIN));
     }
 
     @BeforeEach

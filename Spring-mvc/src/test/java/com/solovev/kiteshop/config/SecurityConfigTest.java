@@ -19,11 +19,13 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.*;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.NestedTestConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import java.util.List;
 
@@ -40,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest
 @AutoConfigureMockMvc
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class})
 class SecurityConfigTest {
     private static final String userName = "user";
     private static final String userServiceName = "userService";
@@ -60,6 +62,7 @@ class SecurityConfigTest {
     @Nested
     @WithAnonymousUser
     public class AnonymousUserTests {
+
         @Test
         public void anonymousUserAllowedCatalog() throws Exception {
             performGetExpectOk(APINamings.CATALOG);
@@ -107,6 +110,7 @@ class SecurityConfigTest {
                     .andExpect(status().is3xxRedirection())
                     .andExpect(redirectedUrl(APINamings.withMain(APINamings.LOGIN)));
         }
+
     }
 
 
@@ -161,6 +165,16 @@ class SecurityConfigTest {
             when(userWithDetails.getUsername()).thenReturn(userName);
             return userWithDetails;
         }
+    }
+
+    @TestConfiguration
+    static class NoValidationConfig {
+        @Bean
+        @Primary
+        public LocalValidatorFactoryBean validatorFactoryBean() {
+            return mock();
+        }
+
     }
 
     private final Pageable expectedDefaultPage =
