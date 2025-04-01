@@ -39,12 +39,13 @@ CREATE TABLE
 CREATE TABLE
     products
 (
-    id       SERIAL PRIMARY KEY,
-    model    VARCHAR(25),
-    price    DECIMAL(6, 2),
-    size     SMALLINT,
-    brand_id INT,
-    year     SMALLINT,
+    id            SERIAL PRIMARY KEY,
+    model         VARCHAR(25),
+    price         DECIMAL(6, 2),
+    size          SMALLINT,
+    brand_id      INT,
+    path_to_image varchar(1000),
+    year          SMALLINT,
     CONSTRAINT fk_brand FOREIGN KEY (brand_id) REFERENCES brands (id),
     UNIQUE (model, size, brand_id, year)
 );

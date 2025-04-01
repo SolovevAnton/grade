@@ -1,8 +1,8 @@
 INSERT INTO products
-    (model, price, size, production_year, brand)
-VALUES ('firstModel', 1000.0, 7, 2022, 'FONE'),
-       ('secondModel', 1000.1, 8, 2023, 'FONE'),
-       ('thirdModel', 1500, 12, 2021, 'CORE');
+    (model, price, size, production_year, brand, path_to_image)
+VALUES ('BANDIT XV', 1000.0, 7, 2022, 'FONE', 'image/bandit-2022.png'),
+       ('BANDIT XVI', 1000.1, 8, 2023, 'FONE', 'image/bandit-2023.png'),
+       ('XR', 1500, 12, 2021, 'CORE', 'image/XR-2021.png');
 
 INSERT INTO orders (user_id, status, created, updated)
 VALUES (1, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),

@@ -27,6 +27,8 @@
 </form>
 <div th:each="product : ${products}">
     <div th:object="${product}">
+        <img th:src="@{/{imagePath}(imagePath=${product.pathToImage})}" alt="Product Image"
+             style="max-width: 200px; height: auto;">
         <h4>Brand: <span th:text="${product.brand}"></span></h4>
         <p>Model: <span th:text="${product.model}"></span></p>
         <p>Size: <span th:text="${product.size}"></span></p>
