@@ -2,16 +2,21 @@ package com.solovev.horserace.model;
 
 import lombok.Data;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collection;
 
 @Data
 public class Race {
     private final int distance;
-    private final Map<Rider, Horse> competitors = new HashMap<>();
+    private final Collection<Rider> competitors;
+    private Rider winner;
 
-    public void addCompetitor(Rider rider, Horse horse) {
-        competitors.put(rider, horse);
+
+    public synchronized boolean tryToSetWinner(Rider rider) {
+        if (winner == null) {
+            winner = rider;
+            return true;
+        }
+        return false;
     }
-
 }
+
