@@ -3,6 +3,7 @@ package com.solovev.horserace.model;
 import lombok.Data;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Data
 public class Race {
@@ -17,6 +18,10 @@ public class Race {
             return true;
         }
         return false;
+    }
+
+    public Optional<Rider> findByRiderId(int number) {
+        return competitors.stream().filter(r -> r.getNumber() == number).findFirst();
     }
 }
 

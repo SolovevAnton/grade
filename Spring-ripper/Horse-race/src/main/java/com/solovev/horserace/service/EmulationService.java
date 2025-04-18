@@ -56,14 +56,11 @@ public class EmulationService {
     }
 
     private class RaceLine {
-        private static int allLines = 1;
-        private final int lineNumber;
         private final int totalDistance;
         private final Rider rider;
         private int currentDistance;
 
         public RaceLine(int totalDistance, Rider rider) {
-            this.lineNumber = allLines++;
             this.totalDistance = totalDistance;
             this.rider = rider;
         }
