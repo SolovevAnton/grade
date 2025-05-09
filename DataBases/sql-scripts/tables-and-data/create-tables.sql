@@ -40,7 +40,7 @@ CREATE TABLE exam_results
     student_id    INTEGER,
     subject_id    INTEGER,
     exam_date     DATE,
-    grade         SMALLINT, -- e.g., 1,2..etc
+    grade SMALLINT,         -- e.g., 1,2..5
     exam_location POINT,    -- For GiST index
     notes         TEXT,     -- For general notes or FTS
     created_at    TIMESTAMPTZ,
