@@ -9,4 +9,7 @@ FROM students s
 WHERE s.last_name ILIKE 'M%';
 
 
-
+EXPLAIN ANALYSE
+SELECT *
+FROM students
+WHERE address_details @> '{"city": "City4"}';
