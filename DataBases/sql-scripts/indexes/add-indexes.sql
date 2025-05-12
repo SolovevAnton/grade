@@ -7,6 +7,7 @@ CREATE INDEX idx_students_address_details ON students USING gin (address_details
 CREATE INDEX idx_subjects_department ON subjects USING hash (department);
 
 --exam-results
+CREATE INDEX idx_exam_results_notes_b_tree ON exam_results (notes);
 CREATE INDEX idx_exam_location_gist ON exam_results USING gist (exam_location);
 
 

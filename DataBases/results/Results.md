@@ -232,5 +232,39 @@ Execution TIME: 18.345 MS
 | subjects     | idx_subjects_lecturer_last_name      | 696 kB     | 304 kB                           | 360 kB     | 48 kB      | 1000         | hash       |
 | subjects     | pk_subjects                          | 696 kB     | 304 kB                           | 360 kB     | 56 kB      | 1000         |            |
 
+### Inserting operations with indexes
 
+table exam_results - starts on empty table 1 ml rows with ` populate_exam_results_data()` function
 
+**without index**
+
+```log
+Fetching actual student and subject IDs for exam result generation...
+Found 100000 student IDs.
+Found 1000 subject IDs.
+Generating 1,000,000 exam results (this may take a while)...
+
+[2025-05-09 20:35:02] 1 row retrieved starting from 1 in 26 s 934 ms (execution: 26 s 733 ms, fetching: 201 ms)
+```
+
+**with B-tree on notes column**
+
+```log
+[2025-05-09 20:42:04] 1 row retrieved starting from 1 in 33 s 210 ms (execution: 33 s 170 ms, fetching: 40 ms)
+```
+
+**with gist on exam_location**
+
+```log
+[2025-05-09 20:44:23] 1 row retrieved starting from 1 in 30 s 383 ms (execution: 30 s 290 ms, fetching: 93 ms)
+```
+
+**with gist and b-tree**
+
+```log
+[2025-05-09 20:45:43] 1 row retrieved starting from 1 in 42 s 682 ms (execution: 42 s 615 ms, fetching: 67 ms)
+```
+
+## Queries
+
+tasks 1-4 can be found: [students-queries.sql](queries/students-queries.sql)
